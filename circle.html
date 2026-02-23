@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>画像描画アプリ</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f0f4f8; }
+        .container { background: white; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { padding: 10px; font-size: 16px; width: 60px; }
+        button { padding: 10px 20px; font-size: 16px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #imageContainer { margin-top: 20px; min-height: 200px; }
+        img { max-width: 100%; border: 1px solid #ddd; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>円の描画アプリ</h2>
+    <p>半径を入力してください (1〜9)</p>
+    <input type="number" id="radiusInput" value="5">
+    <button onclick="sendData()">描画する</button>
+
+    <div id="imageContainer">
+        <p id="status">ここに結果が表示されます</p>
+        <img id="resultImage" style="display:none;">
+    </div>
+</div>
+
+<script>
+    async function sendData() {
+        const radius = document.getElementById('radiusInput').value;
+        const status = document.getElementById('status');
+        const imgElement = document.getElementById('resultImage');
+        
+        // --- 貼り付けポイント：Colabで発行されたURLに書き換えてください ---
+        const url = "https://xxxx-xxxx.ngrok-free.dev/draw_circle"; 
+
+        status.innerText = "描画中...";
+        imgElement.style.display = "none";
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ radius: parseFloat(radius) })
+            });
+
+            const data = await response.json();
+
+            // Pythonから届いたBase64文字列を画像としてセット
+            imgElement.src = "data:image/png;base64," + data.image_data;
+            imgElement.style.display = "inline";
+            status.innerText = "";
+
+        } catch (error) {
+            console.error("Error:", error);
+            status.innerText = "エラーが発生しました。URLを確認してください。";
+        }
+    }
+</script>
+
+</body>
+</html>
