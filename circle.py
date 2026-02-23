@@ -51,7 +51,7 @@ async def draw_circle(request: CircleRequest):
 
 # --- サーバーの起動 ---
 # ngrokのトークンをここに入れてください
-ngrok.set_auth_token("あなたのNGROK_AUTHTOKEN")
+ngrok.set_auth_token("39zaWf2ZjAF5ns7LTsJ14H0yK2j_77WxJ1YDcFekDhiJT2Cem")
 
 # 公開用URLを発行
 public_url = ngrok.connect(8000)
